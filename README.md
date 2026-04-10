@@ -4,7 +4,7 @@ Projeto para exemplificar o trabalho de engenharia e análise de dados, utilizan
 
 Neste projeto, transforma-se dados brutos (Excel) em uma camada analítica performática utilizando DuckDB e Parquet.
 
-🚀 Arquitetura
+🏢 Arquitetura
 
     Engine: DuckDB (Processamento OLAP em memória)
 
@@ -12,9 +12,9 @@ Neste projeto, transforma-se dados brutos (Excel) em uma camada analítica perfo
 
     Backend: FastAPI
 
-    Data Wrangling: Pandas e Regex para limpeza
+    Data Wrangling: Pandas e Regex (normalização e anonimização de dados semi-estruturados)
 
-📊 Insights Analíticos Incluídos
+📈 Insights Analíticos Incluídos
 
     Ranking de Litigiosidade: Identificação das empresas com maior volume de processos.
 
@@ -36,7 +36,7 @@ Neste projeto, transforma-se dados brutos (Excel) em uma camada analítica perfo
 
 🧪 Por que DuckDB?
 
-Escolhi o DuckDB por sua capacidade de executar consultas SQL complexas diretamente em arquivos Parquet, sendo ideal para cenários de Data Analytics onde a performance de leitura e agregação é prioridade, sem a necessidade de um servidor de banco de dados tradicional.
+Escolhi o DuckDB por sua capacidade de executar consultas SQL complexas diretamente em arquivos Parquet, sendo ideal para cenários de Data Analytics onde a performance de leitura e agregação é prioridade, sem a necessidade de um servidor de banco de dados tradicional. Alternativa open source e gratuita.
 
 📊 Visualização dos Dados (Dashboard)
 
@@ -49,4 +49,4 @@ OBS: Os dados contidos no projeto não são representativos do todo, pois compre
 ------------------------------------------
 Este projeto utiliza dados anonimizados para fins educacionais.
 
-Informações pessoais (como CPF e nomes de pessoas físicas) foram removidas ou substituídas por identificadores fictícios, em conformidade com a LGPD (Lei nº 13.709/2018). Vale destacar que os dados sobre as partes envolvidas, advindos de webscraping no site do PJe do TRF-1, não estão mascarados nem anonimizados originalmente, e podem ser obtidos sem login, apenas com consulta simples no portal.
+Informações pessoais (como CPF e nomes de pessoas físicas) foram removidas ou substituídas por identificadores fictícios, em conformidade com a LGPD (Lei nº 13.709/2018). Vale destacar que os dados sobre as partes envolvidas foram obtidos de webscraping no site do PJe do TRF-1.
