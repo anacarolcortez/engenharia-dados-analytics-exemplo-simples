@@ -45,3 +45,8 @@ Uma demonstração do dashboard interativo desenvolvido com Streamlit:
 ![Dashboard Analytics TRF1](graficos.png)
 
 OBS: Os dados contidos no projeto não são representativos do todo, pois compreendem menos de 1% dos casos e não incluem grandes empresas, propositalmente. A amostra foi escolhida apenas para estudos de ETL
+
+------------------------------------------
+Este projeto utiliza dados anonimizados para fins educacionais.
+
+Informações pessoais (como CPF e nomes de pessoas físicas) foram removidas ou substituídas por identificadores fictícios, em conformidade com a LGPD (Lei nº 13.709/2018). Vale destacar que os dados sobre as partes envolvidas, advindos de webscraping no site do PJe do TRF-1 não estão mascarados nem anonimizados.
