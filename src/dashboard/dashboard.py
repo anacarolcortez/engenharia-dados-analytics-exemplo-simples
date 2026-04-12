@@ -60,7 +60,7 @@ def render_tendencia_mensal():
 def render_maiores_litigantes():
     st.subheader("Maiores Litigantes (Polo Passivo)")
 
-    df = pd.DataFrame(service.empresas_mais_processadas(limit=5))
+    df = pd.DataFrame(service.empresas_mais_processadas(limit=10))
 
     fig = px.bar(
         df,
@@ -82,7 +82,7 @@ def render_maiores_litigantes():
 def render_ranking_por_estado():
     st.subheader("Top Litigantes por Estado")
 
-    df = pd.DataFrame(service.ranking_empresas_por_estado(limit=5))
+    df = pd.DataFrame(service.ranking_empresas_por_estado(limit=10))
 
     estados = sorted(df["estado"].unique())
     estado = st.selectbox("Selecione o Estado:", estados)
@@ -157,6 +157,8 @@ def render_processos_por_assunto():
     df = df[df['assunto'].astype(str).str.lower() != "null"]
     df = df[df['assunto'].str.strip() != ""]
 
+    df = df.sort_values("total", ascending=True)
+
     fig = px.bar(
         df,
         x="total",
@@ -164,18 +166,74 @@ def render_processos_por_assunto():
         orientation="h",
         text="total",
         color="total",
-        labels={"total": "Qtd Processos", "assunto": "Assunto"},
+        labels={
+            "total": "Qtd Processos",
+            "assunto": "Assunto"
+        },
         color_continuous_scale="Blues"
     )
 
+    fig.update_traces(textposition="outside")
     fig.update_layout(
         yaxis={'categoryorder': 'total ascending'},
-        showlegend=False
+        xaxis_title="Qtd Processos",
+        yaxis_title="Assunto",
+        margin=dict(l=0, r=20, t=30, b=0)
     )
-    
-    fig.update_traces(textposition='outside')
 
-    st.plotly_chart(style_fig(fig), use_container_width=True)
+    st.plotly_chart(fig, use_container_width=True)
+
+def render_processos_por_assunto_empresa():
+    st.subheader("Assuntos por Empresa")
+    
+    df = pd.DataFrame(service.processos_por_assunto_por_empresa(limit=50))
+
+    df = df.dropna(subset=['assunto', 'empresa_nome'])
+    df = df[df['assunto'].str.strip() != ""]
+    df = df[df['empresa_nome'].str.strip() != ""]
+
+    top_n = st.slider("Qtd de empresas", 3, 15, 5)
+
+    top_empresas = (
+        df.groupby("empresa_nome")["total"]
+        .sum()
+        .nlargest(top_n)
+        .index
+    )
+    df = df[df["empresa_nome"].isin(top_empresas)]
+
+    ordem = (
+        df.groupby("assunto")["total"]
+        .sum()
+        .sort_values()
+        .index
+    )
+
+    fig = px.bar(
+        df,
+        x="total",
+        y="assunto",
+        color="empresa_nome",
+        orientation="h",
+        labels={
+            "total": "Qtd Processos",
+            "assunto": "Assunto",
+            "empresa_nome": "Empresa"
+        }
+    )
+
+    fig.update_layout(
+        yaxis={
+            'categoryorder': 'array',
+            'categoryarray': ordem
+        },
+        xaxis_title="Qtd Processos",
+        yaxis_title="Assunto",
+        legend_title="Empresa",
+        margin=dict(l=0, r=20, t=30, b=0)
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
 
 def load_stats():
     return service.estatisticas_tempo_processo()
@@ -221,6 +279,8 @@ def main():
         render_processos_por_assunto()
 
     st.divider()
+
+    render_processos_por_assunto_empresa()
 
 if __name__ == "__main__":
     main()

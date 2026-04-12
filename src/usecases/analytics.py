@@ -42,6 +42,24 @@ class AnalyticsService:
         df = self.db.query(query)
         return self._tratar_df(df)
     
+    def processos_por_assunto_por_empresa(self, limit=50):
+        query = f"""
+            SELECT 
+                assunto, 
+                empresa_nome, 
+                COUNT(*) as total 
+            FROM '{self.db.path}' 
+            WHERE assunto IS NOT NULL
+            AND TRIM(assunto) <> ''
+            AND empresa_nome IS NOT NULL
+            AND TRIM(empresa_nome) <> ''
+            GROUP BY assunto, empresa_nome
+            ORDER BY total DESC
+            LIMIT {limit}
+        """
+        df = self.db.query(query)
+        return self._tratar_df(df)
+    
     def empresas_mais_processadas(self, limit=5):
         query = f"""
             SELECT empresa_nome, empresa_cnpj, COUNT(*) as total
@@ -56,11 +74,12 @@ class AnalyticsService:
     def ranking_empresas_por_estado(self, limit=5):
         query = f"""
             SELECT 
-                estado, empresa_nome, empresa_cnpj, COUNT(*) as total,
+                estado, empresa_nome, COUNT(*) as total,
                 ROW_NUMBER() OVER (PARTITION BY estado ORDER BY COUNT(*) DESC) as ranking
             FROM '{self.db.path}'
             WHERE empresa_cnpj IS NOT NULL
-            GROUP BY estado, empresa_nome, empresa_cnpj
+            AND estado IS NOT NULL
+            GROUP BY estado, empresa_nome
             QUALIFY ranking <= {limit}
             ORDER BY estado, ranking
         """

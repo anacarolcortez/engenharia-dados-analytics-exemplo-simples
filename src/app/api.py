@@ -29,6 +29,13 @@ def get_processos_por_assunto(service: AnalyticsService = Depends(get_analytics_
         raise HTTPException(status_code=404, detail="Dados não encontrados")
     return dados
 
+@app.get("/processos/por-assunto/por-empresa")
+def get_processos_por_assunto_por_empresa(service: AnalyticsService = Depends(get_analytics_service)):
+    dados = service.processos_por_assunto_por_empresa()
+    if not dados:
+        raise HTTPException(status_code=404, detail="Dados não encontrados")
+    return dados
+
 @app.get("/processos/cnpj/{cnpj}", response_model=List[Processo])
 def get_by_cnpj(cnpj: str, service: AnalyticsService = Depends(get_analytics_service)):
     dados = service.buscar_processos_por_cnpj(cnpj)
